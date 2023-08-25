@@ -1,12 +1,25 @@
-import express from "express";
+//npm packages
+import express, { Application, Response, Request } from "express";
+import cookieParser from "cookie-parser";
 
-const app = express();
-const port = 3000;
-
-app.get("/", (req, res) => {
-  res.send("Hello, Express and TypeScript!");
+require("dotenv").config({
+  path: ".env",
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+// Custom Modules, Packages, Configs, etc.
+
+const app: Application = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+//healthcheck
+app.get("/healthcheck", (_, res: Response) => {
+  res.status(200).json({ error: false, message: "healthcheck" });
 });
+
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hello World!");
+});
+
+export default app;
