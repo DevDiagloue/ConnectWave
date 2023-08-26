@@ -3,7 +3,7 @@ import User from "../../models/User";
 import bcrypt from "bcrypt";
 import userLoginValidationSchema from "../../validations/loginValidationSchema";
 
-const loginController = async (req: Request, res: Response) => {
+const login = async (req: Request, res: Response) => {
   let token;
   const { email, password } = req.body;
 
@@ -51,4 +51,4 @@ const loginController = async (req: Request, res: Response) => {
   }
 };
 
-export default loginController;
+export default login;

@@ -3,7 +3,7 @@ import User from "../../models/User";
 import userRegisterValidationSchema from "../../validations/registerValidationSchema";
 import bcrypt from "bcrypt";
 
-const registerController = async (req: Request, res: Response) => {
+const register = async (req: Request, res: Response) => {
   const { userName, firstName, email, password, profilePicture } = req.body;
 
   try {
@@ -48,4 +48,4 @@ const registerController = async (req: Request, res: Response) => {
   }
 };
 
-export default registerController;
+export default register;
