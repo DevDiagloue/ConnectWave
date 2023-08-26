@@ -18,8 +18,4 @@ app.get("/healthcheck", (_, res: Response) => {
   res.status(200).json({ error: false, message: "healthcheck" });
 });
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
-});
-
 export default app;
