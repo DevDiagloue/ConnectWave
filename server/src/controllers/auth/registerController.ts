@@ -1,34 +1,15 @@
 import { Request, Response } from "express";
-import User from "../../models/User/User";
 import userRegisterValidationSchema from "../../validations/registerValidationSchema";
 import bcrypt from "bcrypt";
-import { IResult } from "../../utils/businessRules/IResult";
 import BusinessRules from "../../utils/businessRules/BusinessRules";
-
-const emailExistsCheck = async (email: string): Promise<IResult> => {
-  const userEmailExists = await User.findOne({ email });
-
-  if (userEmailExists) {
-    return { error: false, success: true, message: "Email already exists" };
-  }
-  return { success: true, error: false };
-};
-
-const userNameExistsCheck = async (userName: string): Promise<IResult> => {
-  const userNameExists = await User.findOne({ userName });
-
-  if (userNameExists) {
-    return { error: false, success: true, message: "User Name already exists" };
-  }
-
-  return { success: true, error: false };
-};
+import { emailExistsCheck, newUser, userNameExistsCheck } from "../../services/auth/registerServices";
+import { z } from "zod";
 
 const register = async (req: Request, res: Response) => {
   const { userName, firstName, email, password } = req.body;
 
   try {
-    const validateData = userRegisterValidationSchema.parse(req.body);
+   userRegisterValidationSchema.parse(req.body);
 
     const businessResult = await BusinessRules(
       () => emailExistsCheck(email),
@@ -45,20 +26,27 @@ const register = async (req: Request, res: Response) => {
     const saltPassword = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, saltPassword);
 
-    const newUser = await User.create({
-      userName,
-      firstName,
-      email,
-      password: hashPassword,
-    });
-
-    const data = await newUser.save();
+    const userDto = {userName,firstName,email,password:hashPassword}
+    const data = await newUser(userDto)
 
     return res
       .status(201)
       .json({ error: false, message: "User register successfull", data });
   } catch (error) {
-    return res.status(500).json({ error: true, message: error });
+    //validation error
+    if (error instanceof z.ZodError) {
+      const formattedErrors = error.errors.map((e) => ({
+        field: e.path.join("."),
+        message: e.message,
+      }));
+      return res.status(422).json({
+        error: true,
+        message: "Validation failed",
+        data: formattedErrors,
+      });
+    } else {
+      res.status(500).json({ error: true, message: error });
+    }
   }
 };
 
