@@ -7,7 +7,7 @@ import BusinessRules from "../../utils/businessRules/BusinessRules";
 
 export const emailExistsCheck = async (email: string): Promise<IResult> => {
   const userEmailExists = await User.findOne({ email });
-  
+
   if (userEmailExists) {
     return { success: false, message: "Email already exists" };
   }
@@ -37,6 +37,7 @@ const register = async (req: Request, res: Response) => {
         message: businessResult,
       });
     }
+
     // const userEmailExists = await User.findOne({ email });
 
     // if (userEmailExists) {

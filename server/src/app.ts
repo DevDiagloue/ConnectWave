@@ -7,6 +7,7 @@ require("dotenv").config({
 });
 
 // Custom Modules, Packages, Configs, etc.
+import { initRoutes } from "./routes/index.routes";
 
 const app: Application = express();
 app.use(express.json());
@@ -18,4 +19,5 @@ app.get("/healthcheck", (_, res: Response) => {
   res.status(200).json({ error: false, message: "healthcheck" });
 });
 
+initRoutes(app);
 export default app;
