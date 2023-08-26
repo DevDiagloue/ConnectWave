@@ -2,6 +2,17 @@ import { Request, Response } from "express";
 import User from "../../models/User";
 import userRegisterValidationSchema from "../../validations/registerValidationSchema";
 import bcrypt from "bcrypt";
+import { IResult } from "../../utils/businessRules/IResult";
+import BusinessRules from "../../utils/businessRules/BusinessRules";
+
+export const emailExistsCheck = async (email: string): Promise<IResult> => {
+  const userEmailExists = await User.findOne({ email });
+  
+  if (userEmailExists) {
+    return { success: false, message: "Email already exists" };
+  }
+  return { success: true };
+};
 
 const register = async (req: Request, res: Response) => {
   const { userName, firstName, email, password, profilePicture } = req.body;
@@ -18,14 +29,22 @@ const register = async (req: Request, res: Response) => {
       });
     }
 
-    const userEmailExists = await User.findOne({ email });
+    const businessResult = BusinessRules(() => emailExistsCheck(email));
 
-    if (userEmailExists) {
+    if (businessResult) {
       return res.status(400).json({
         error: true,
-        message: "Email already exists",
+        message: businessResult,
       });
     }
+    // const userEmailExists = await User.findOne({ email });
+
+    // if (userEmailExists) {
+    //   return res.status(400).json({
+    //     error: true,
+    //     message: "Email already exists",
+    //   });
+    // }
 
     const saltPassword = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, saltPassword);
