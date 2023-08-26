@@ -1,9 +1,9 @@
 import mongoose, { ConnectOptions } from "mongoose";
 
-const MONGO_URL = process.env.MONGO_URL || "";
+const MONGO_URL: string = process.env.MONGO_URL || "";
 mongoose.set("strictQuery", false);
 
-export const connectDB = async () => {
+export const connectionDatabase = async () => {
   await mongoose
     .connect(MONGO_URL, {
       useNewUrlParser: true,

@@ -1,26 +1,12 @@
-import mongoose, { Document } from "mongoose";
+import mongoose from "mongoose";
+import IUser from "./IUser";
 import moment from "moment";
 
-interface User extends Document {
-  userName: string;
-  firstName: string;
-  email: string;
-  password: string;
-  profilePicture?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-const userSchema = new mongoose.Schema<User>({
+const userSchema = new mongoose.Schema<IUser>({
   userName: { type: String, required: true, unique: true },
   firstName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  profilePicture: {
-    type: String,
-    default: "",
-    required: false,
-  },
   createdAt: {
     type: String,
     default: moment().format("MMMM Do YYYY, h:mm:ss a"),
@@ -31,6 +17,6 @@ const userSchema = new mongoose.Schema<User>({
   },
 });
 
-const User = mongoose.model<User>("User", userSchema);
+const User = mongoose.model<IUser>("User", userSchema);
 
 export default User;

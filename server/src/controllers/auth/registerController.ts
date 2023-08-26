@@ -1,35 +1,39 @@
 import { Request, Response } from "express";
-import User from "../../models/User";
+import User from "../../models/User/User";
 import userRegisterValidationSchema from "../../validations/registerValidationSchema";
 import bcrypt from "bcrypt";
 import { IResult } from "../../utils/businessRules/IResult";
 import BusinessRules from "../../utils/businessRules/BusinessRules";
 
-export const emailExistsCheck = async (email: string): Promise<IResult> => {
+const emailExistsCheck = async (email: string): Promise<IResult> => {
   const userEmailExists = await User.findOne({ email });
 
   if (userEmailExists) {
-    return { success: false, message: "Email already exists" };
+    return { error: false, success: true, message: "Email already exists" };
   }
-  return { success: true };
+  return { success: true, error: false };
+};
+
+const userNameExistsCheck = async (userName: string): Promise<IResult> => {
+  const userNameExists = await User.findOne({ userName });
+
+  if (userNameExists) {
+    return { error: false, success: true, message: "User Name already exists" };
+  }
+
+  return { success: true, error: false };
 };
 
 const register = async (req: Request, res: Response) => {
-  const { userName, firstName, email, password, profilePicture } = req.body;
+  const { userName, firstName, email, password } = req.body;
 
   try {
-    const checkInputValidation = await userRegisterValidationSchema.parse(
-      req.body
+    const validateData = userRegisterValidationSchema.parse(req.body);
+
+    const businessResult = await BusinessRules(
+      () => emailExistsCheck(email),
+      () => userNameExistsCheck(userName)
     );
-
-    if (checkInputValidation) {
-      return res.status(400).json({
-        error: true,
-        message: "Invalid data",
-      });
-    }
-
-    const businessResult = BusinessRules(() => emailExistsCheck(email));
 
     if (businessResult) {
       return res.status(400).json({
@@ -37,15 +41,6 @@ const register = async (req: Request, res: Response) => {
         message: businessResult,
       });
     }
-
-    // const userEmailExists = await User.findOne({ email });
-
-    // if (userEmailExists) {
-    //   return res.status(400).json({
-    //     error: true,
-    //     message: "Email already exists",
-    //   });
-    // }
 
     const saltPassword = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, saltPassword);
@@ -55,7 +50,6 @@ const register = async (req: Request, res: Response) => {
       firstName,
       email,
       password: hashPassword,
-      profilePicture,
     });
 
     const data = await newUser.save();
