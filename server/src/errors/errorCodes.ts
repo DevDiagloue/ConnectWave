@@ -9,4 +9,8 @@ export const ErrorCodes = {
     code: StatusCodes.BAD_REQUEST,
     message: "Username already exists",
   },
+  PASSWORD_IS_WRONG: {
+    code: StatusCodes.BAD_REQUEST,
+    message: "Password is wrong",
+  },
 };

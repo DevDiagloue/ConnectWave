@@ -1,4 +1,12 @@
 import mongoose, { ConnectOptions } from "mongoose";
+import dotenv from "dotenv";
+
+
+const envFile =
+  process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development'
+dotenv.config({
+  path: envFile,
+})
 
 const MONGO_URL: string = process.env.MONGO_URL || "";
 mongoose.set("strictQuery", false);

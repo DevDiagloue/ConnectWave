@@ -1,38 +1,40 @@
 import { Request, Response } from "express";
 import User from "../../models/User/User";
 import bcrypt from "bcrypt";
+import { generateToken } from "../../helpers/token/generateToken";
 import userLoginValidationSchema from "../../validations/loginValidationSchema";
+import BusinessRules from "../../utils/businessRules/BusinessRules";
+import {
+  checkPasswordIsWrong,
+  findUserByEmail,
+} from "../../services/auth/loginServices";
+import IUser from "../../models/User/IUser";
 
 const login = async (req: Request, res: Response) => {
   let token;
   const { email, password } = req.body;
 
   try {
-    const checkInputValidation = userLoginValidationSchema.parse(req.body);
+    await userLoginValidationSchema.parse(req.body);
 
-    if (checkInputValidation) {
+    const user = await findUserByEmail(email);
+
+    const businessResult = await BusinessRules(() =>
+      checkPasswordIsWrong(password, user.password)
+    );
+
+    if (businessResult) {
       return res.status(400).json({
-        error: true,
-        message: "Invalid data",
+        success: false,
+        message: businessResult,
       });
     }
 
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(400).json({ error: true, message: "Email is wrong!" });
-    }
-
-    const checkPasswordIsWrong = await bcrypt.compare(password, user.password);
-    if (!checkPasswordIsWrong) {
-      return res
-        .status(400)
-        .json({ error: true, message: "Password is wrong!" });
-    }
+    token = await generateToken(user);
 
     res.cookie("userJWT", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production" ? true : false,
+      secure: false,
       sameSite: "lax", //cross-site cookie ** boolean | 'lax' | 'strict' | 'none' | undefined;
       maxAge: 24 * 60 * 60 * 1000, //maxAge = 1 day
       // signed: true
@@ -43,7 +45,6 @@ const login = async (req: Request, res: Response) => {
     return res.status(200).json({
       error: false,
       message: "User Login Succesfully!",
-      data: user,
       token: token,
     });
   } catch (error) {

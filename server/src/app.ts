@@ -1,11 +1,13 @@
 //npm packages
 import express, { Application, Response, Request } from "express";
 import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
 
-require("dotenv").config({
-  path: ".env.local",
-});
-
+const envFile =
+  process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development'
+dotenv.config({
+  path: envFile,
+})
 // Custom Modules, Packages, Configs, etc.
 import { initRoutes } from "./routes/index.routes";
 import { errorHandler } from "./errors/errorHandler";
