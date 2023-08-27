@@ -28,13 +28,10 @@ const register = async (req: Request, res: Response) => {
   const { userName, firstName, email, password } = req.body;
 
   try {
-    const validateData = userRegisterValidationSchema.parse(req.body);
+    userRegisterValidationSchema.parse(req.body);
 
-    const businessResult = await BusinessRules(
-      () => emailExistsCheck(email),
-      () => userNameExistsCheck(userName)
-    );
-
+    const businessResult = await BusinessRules(() => emailExistsCheck(email));
+0
     if (businessResult) {
       return res.status(400).json({
         error: true,
