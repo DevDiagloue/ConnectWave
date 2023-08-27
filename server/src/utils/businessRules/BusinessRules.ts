@@ -1,13 +1,15 @@
-import { IResult } from "../businessRules/IResult";
+import { IResult } from '../businessRules/IResult'
 
-const BusinessRules = async (...logics: Array<() => Promise<IResult>>): Promise<IResult | null> => {
-    for (const logicFunc of logics) {
-        const logic = await logicFunc();
-        if (!logic.success) {
-            return logic;
-        }
+const BusinessRules = async (
+  ...logics: Array<() => Promise<IResult>>
+): Promise<IResult | null> => {
+  for (const logicFunc of logics) {
+    const logic = await logicFunc()
+    if (!logic.success) {
+      return logic
     }
-    return null;
+  }
+  return null
 }
 
-export default BusinessRules;
+export default BusinessRules

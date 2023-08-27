@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
-import IUser from "./IUser";
-import moment from "moment";
+import mongoose from 'mongoose'
+import IUser from './IUser'
+import moment from 'moment'
 
 const userSchema = new mongoose.Schema<IUser>({
   userName: { type: String, required: true, unique: true },
@@ -9,14 +9,14 @@ const userSchema = new mongoose.Schema<IUser>({
   password: { type: String, required: true },
   createdAt: {
     type: String,
-    default: moment().format("MMMM Do YYYY, h:mm:ss a"),
+    default: moment().format('MMMM Do YYYY, h:mm:ss a'),
   },
   updatedAt: {
     type: String,
-    default: moment().format("MMMM Do YYYY, h:mm:ss a"),
+    default: moment().format('MMMM Do YYYY, h:mm:ss a'),
   },
-});
+})
 
-const User = mongoose.model<IUser>("User", userSchema);
+const User = mongoose.model<IUser>('User', userSchema)
 
-export default User;
+export default User
