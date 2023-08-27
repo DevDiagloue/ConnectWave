@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import userRegisterValidationSchema from "../../validations/registerValidationSchema";
+import userRegisterValidationSchema from "../../validations/auth/registerValidationSchema";
 import bcrypt from "bcrypt";
 import BusinessRules from "../../utils/businessRules/BusinessRules";
 import {

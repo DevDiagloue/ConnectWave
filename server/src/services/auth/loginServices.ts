@@ -13,8 +13,7 @@ interface UserDto {
 export const findUserByEmail = async (email: string): Promise<IUser> => {
   const user = await User.findOne({ email });
   if (!user) {
-    console.log("service is here");
-    throw new CustomError(ErrorCodes.EMAIL_EXISTS);
+    throw new CustomError(ErrorCodes.EMAIL_NOT_FOUND);
   }
   return user;
 };

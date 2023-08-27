@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { generateToken } from "../../helpers/token/generateToken";
-import userLoginValidationSchema from "../../validations/loginValidationSchema";
+import userLoginValidationSchema from "../../validations/auth/loginValidationSchema";
 import BusinessRules from "../../utils/businessRules/BusinessRules";
 import {
   checkPasswordIsWrong,
@@ -9,7 +9,6 @@ import {
 import { cookieOptions } from "../../helpers/token/cookieOptions";
 
 const login = async (req: Request, res: Response) => {
-  let token;
   const { email, password } = req.body;
 
   try {
@@ -28,7 +27,7 @@ const login = async (req: Request, res: Response) => {
       });
     }
 
-    token = await generateToken(user);
+    const token = await generateToken(user);
 
     res.cookie("userJWT", token, cookieOptions);
 

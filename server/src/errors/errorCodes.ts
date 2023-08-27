@@ -11,6 +11,10 @@ export const ErrorCodes = {
   },
   PASSWORD_IS_WRONG: {
     code: StatusCodes.BAD_REQUEST,
-    message: "Password is wrong",
+    message: "Password or email is wrong",
+  },
+  EMAIL_NOT_FOUND: {
+    code: StatusCodes.BAD_REQUEST,
+    message: "Email not found",
   },
 };
