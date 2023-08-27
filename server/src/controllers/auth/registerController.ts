@@ -19,7 +19,7 @@ const register = async (req: Request, res: Response) => {
       () => emailExistsCheck(email),
     )
 
-    if (businessResult) {
+    if (!businessResult) {
       return res.status(400).json({
         success: false,
         message: businessResult,
@@ -40,4 +40,4 @@ const register = async (req: Request, res: Response) => {
   }
 }
 
-export default register
+export default { register }

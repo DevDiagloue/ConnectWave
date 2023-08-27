@@ -11,4 +11,4 @@ const logout = async (req: Request, res: Response) => {
   }
 }
 
-export default logout
+export default { logout }

@@ -5,11 +5,12 @@ const BusinessRules = async (
 ): Promise<IResult | null> => {
   for (const logicFunc of logics) {
     const logic = await logicFunc()
+    // console.log("Logic Result:", logic);
     if (!logic.success) {
       return logic
     }
   }
-  return null
+  return await logics[logics.length - 1]()
 }
 
 export default BusinessRules

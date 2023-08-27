@@ -17,4 +17,8 @@ export const ErrorCodes = {
     code: StatusCodes.BAD_REQUEST,
     message: 'Email not found',
   },
+  USER_NOT_FOUND: {
+    code: StatusCodes.BAD_REQUEST,
+    message: 'User not found',
+  },
 }

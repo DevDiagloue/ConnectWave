@@ -20,7 +20,7 @@ const login = async (req: Request, res: Response) => {
       checkPasswordIsWrong(password, user.password),
     )
 
-    if (businessResult) {
+    if (!businessResult) {
       return res.status(400).json({
         success: false,
         message: businessResult,
@@ -41,4 +41,4 @@ const login = async (req: Request, res: Response) => {
   }
 }
 
-export default login
+export default { login }
