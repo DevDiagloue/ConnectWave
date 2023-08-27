@@ -8,11 +8,13 @@ require("dotenv").config({
 
 // Custom Modules, Packages, Configs, etc.
 import { initRoutes } from "./routes/index.routes";
+import { errorHandler } from "./errors/errorHandler";
 
 const app: Application = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(errorHandler);
 
 //healthcheck
 app.get("/healthcheck", (_, res: Response) => {
