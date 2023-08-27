@@ -3,7 +3,7 @@ import express, { Application, Response, Request } from "express";
 import cookieParser from "cookie-parser";
 
 require("dotenv").config({
-  path: ".env",
+  path: ".env.local",
 });
 
 // Custom Modules, Packages, Configs, etc.
