@@ -26,7 +26,6 @@ export const checkPasswordIsWrong = async (
   const checkPasswordIsWrong = await bcrypt.compare(password, userPassword);
 
   if (!checkPasswordIsWrong) {
-    console.log("şifre yanlış");
     throw new CustomError(ErrorCodes.PASSWORD_IS_WRONG);
   }
 
