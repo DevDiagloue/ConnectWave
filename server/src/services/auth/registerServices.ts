@@ -10,7 +10,7 @@ interface UserDto {
   password: string;
 }
 
-export const newUser = async (userDto: UserDto) => {
+export const createNewUser = async (userDto: UserDto) => {
   const newUser = await User.create(userDto);
 
   const data = await newUser.save();
