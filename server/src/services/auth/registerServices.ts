@@ -1,7 +1,7 @@
 import User from '../../models/User/User'
 import { IResult } from '../../utils/businessRules/IResult'
-import { CustomError } from '../../errors/customError'
-import { ErrorCodes } from '../../errors/errorCodes'
+import { CustomError } from '../../handler/errors/customError'
+import { ErrorCodes } from '../../handler/errors/errorCodes'
 
 interface UserDto {
   userName: string

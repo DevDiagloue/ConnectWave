@@ -12,8 +12,15 @@ const register = async (req: Request, res: Response) => {
   const { userName, firstName, email, password } = req.body
 
   try {
-    await userRegisterValidationSchema.parse(req.body)
+    const validationResult = await userRegisterValidationSchema.safeParse(req.body)
 
+    if (!validationResult.success) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid Validation',
+      })
+    }
+    
     const businessResult = await BusinessRules(
       () => userNameExistsCheck(userName),
       () => emailExistsCheck(email),

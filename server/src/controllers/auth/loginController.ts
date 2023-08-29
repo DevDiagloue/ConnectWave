@@ -7,14 +7,25 @@ import {
   findUserByEmail,
 } from '../../services/auth/loginServices'
 import { cookieOptions } from '../../helpers/token/cookieOptions'
+import { CustomSuccess } from '../../handler/success/customSuccess'
+import { SuccessCodes } from '../../handler/success/successCodes'
 
 const login = async (req: Request, res: Response) => {
   const { email, password } = req.body
 
   try {
-    await userLoginValidationSchema.parse(req.body)
+    const validationResult = await userLoginValidationSchema.safeParse(req.body)
+
+    if (!validationResult.success) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid Validation',
+      })
+    }
 
     const user = await findUserByEmail(email)
+
+    console.log('user typeof', typeof user)
 
     const businessResult = await BusinessRules(() =>
       checkPasswordIsWrong(password, user.password),
@@ -31,11 +42,12 @@ const login = async (req: Request, res: Response) => {
 
     res.cookie('userJWT', token, cookieOptions)
 
-    return res.status(200).json({
-      error: false,
-      message: 'User Login Succesfully!',
+    const successResponse = new CustomSuccess(SuccessCodes.OK, {
+      message: SuccessCodes.OK.message,
       token: token,
     })
+
+    return res.json(successResponse)
   } catch (error) {
     return res.status(500).json({ error: true, message: error })
   }

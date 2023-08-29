@@ -1,14 +1,10 @@
 import User from '../../models/User/User'
 import IUser from '../../models/User/IUser'
 import { IResult } from '../../utils/businessRules/IResult'
-import { CustomError } from '../../errors/customError'
-import { ErrorCodes } from '../../errors/errorCodes'
+import { CustomError } from '../../handler/errors/customError'
+import { ErrorCodes } from '../../handler/errors/errorCodes'
 import bcrypt from 'bcrypt'
 
-interface UserDto {
-  email: string
-  password: string
-}
 
 export const findUserByEmail = async (email: string): Promise<IUser> => {
   const user = await User.findOne({ email })

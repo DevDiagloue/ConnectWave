@@ -10,7 +10,7 @@ dotenv.config({
 })
 // Custom Modules, Packages, Configs, etc.
 import { initRoutes } from './routes/index.routes'
-import { errorHandler } from './errors/errorHandler'
+import { errorHandler } from './handler/errors/errorHandler'
 
 const app: Application = express()
 app.use(express.json())
@@ -24,4 +24,5 @@ app.get('/healthcheck', (_, res: Response) => {
 })
 
 initRoutes(app)
-export default app
+
+export default app;

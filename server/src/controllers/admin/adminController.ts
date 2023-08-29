@@ -1,6 +1,9 @@
 import { Request, Response } from 'express'
 import BusinessRules from '../../utils/businessRules/BusinessRules'
-import { getUserId } from '../../services/admin/adminServices'
+import {
+  getUserByIdService,
+  getAllUserService,
+} from '../../services/admin/adminServices'
 import getUserByIdValidationSchema from '../../validations/admin/getUserByIdValidationSchema'
 
 const getUserById = async (req: Request, res: Response) => {
@@ -16,7 +19,7 @@ const getUserById = async (req: Request, res: Response) => {
       })
     }
 
-    const businessResult = await BusinessRules(() => getUserId(id))
+    const businessResult = await BusinessRules(() => getUserByIdService(id))
 
     if (!businessResult) {
       return res.status(400).json({
@@ -35,4 +38,30 @@ const getUserById = async (req: Request, res: Response) => {
   }
 }
 
-export default { getUserById }
+const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const page = Number(req.query.pageNumber) || 1
+    const pageSize = 20
+
+    const businessResult = await BusinessRules(() =>
+      getAllUserService(page, pageSize),
+    )
+
+    if (!businessResult) {
+      return res.status(400).json({
+        success: false,
+        message: businessResult,
+      })
+    }
+
+    return res.status(200).json({
+      success: false,
+      message: 'User found!',
+      data: businessResult.data,
+    })
+  } catch (error) {
+    return res.status(500).json({ error: true, message: error })
+  }
+}
+
+export default { getUserById, getAllUsers }
