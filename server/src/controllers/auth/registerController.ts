@@ -7,12 +7,16 @@ import {
   createNewUser,
   userNameExistsCheck,
 } from '../../services/auth/registerServices'
+import { CustomSuccess } from '../../handler/success/customSuccess'
+import { SuccessCodes } from '../../handler/success/successCodes'
 
 const register = async (req: Request, res: Response) => {
   const { userName, firstName, email, password } = req.body
 
   try {
-    const validationResult = await userRegisterValidationSchema.safeParse(req.body)
+    const validationResult = await userRegisterValidationSchema.safeParse(
+      req.body,
+    )
 
     if (!validationResult.success) {
       return res.status(400).json({
@@ -20,7 +24,7 @@ const register = async (req: Request, res: Response) => {
         message: 'Invalid Validation',
       })
     }
-    
+
     const businessResult = await BusinessRules(
       () => userNameExistsCheck(userName),
       () => emailExistsCheck(email),
@@ -39,9 +43,13 @@ const register = async (req: Request, res: Response) => {
     const userDto = { userName, firstName, email, password: hashPassword }
     const data = await createNewUser(userDto)
 
-    return res
-      .status(201)
-      .json({ error: false, message: 'User register success', data })
+    const successResponse = new CustomSuccess(SuccessCodes.OK, {
+      message: SuccessCodes.OK.message,
+      data: data,
+    })
+
+    return res.json(successResponse)
+    
   } catch (error) {
     return res.status(500).json({ error: true, message: error })
   }

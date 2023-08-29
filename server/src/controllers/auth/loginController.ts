@@ -25,8 +25,6 @@ const login = async (req: Request, res: Response) => {
 
     const user = await findUserByEmail(email)
 
-    console.log('user typeof', typeof user)
-
     const businessResult = await BusinessRules(() =>
       checkPasswordIsWrong(password, user.password),
     )

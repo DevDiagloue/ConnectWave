@@ -7,9 +7,9 @@ const userLoginValidationSchema = z.object({
       invalid_type_error: 'email must be a string',
     })
     .min(3)
-    .max(255)
+    .max(50)
     .email(),
-  password: z.string().min(3).max(255),
+  password: z.string().min(3).max(100),
 })
 
 export default userLoginValidationSchema

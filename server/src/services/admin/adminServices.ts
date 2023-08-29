@@ -25,3 +25,27 @@ export const getAllUserService = async (
   }
   return { success: true, data: allUsers }
 }
+
+export const updateUserByIdService = async (
+  id: string,
+  updatedUserData: any,
+): Promise<IResult> => {
+  const updatedUser = await User.findOneAndUpdate(
+    { _id: id },
+    updatedUserData,
+    { new: true },
+  )
+
+  if (!updatedUser) {
+    throw new CustomError(ErrorCodes.USER_NOT_FOUND)
+  }
+  return { success: true, data: updatedUserData }
+}
+
+// export const updateUserRoleService = async (
+//   roles: string,
+// ): Promise<IResult> => {
+
+
+//   return { success: true, data: updatedUser }
+// }
