@@ -21,4 +21,8 @@ export const ErrorCodes = {
     code: StatusCodes.BAD_REQUEST,
     message: 'User not found',
   },
+  INVALID_VALIDATION: {
+    code: StatusCodes.BAD_REQUEST,
+    message: 'Invalid Validation Please check your inputs',
+  },
 }

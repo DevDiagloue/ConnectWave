@@ -11,6 +11,8 @@ import updateUserByIdValidationsSchema from '../../validations/admin/updateUserB
 import updateUserRoleValidationsSchema from '../../validations/admin/updateUserRoleValidationSchema'
 import { CustomSuccess } from '../../handler/success/customSuccess'
 import { SuccessCodes } from '../../handler/success/successCodes'
+import { CustomError } from '../../handler/errors/customError'
+import { ErrorCodes } from '../../handler/errors/errorCodes'
 
 const getUserById = async (req: Request, res: Response) => {
   try {
@@ -19,10 +21,7 @@ const getUserById = async (req: Request, res: Response) => {
     const validationResult = getUserByIdValidationSchema.safeParse(req.params)
 
     if (!validationResult.success) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid ObjectId',
-      })
+      throw new CustomError(ErrorCodes.INVALID_VALIDATION)
     }
 
     const businessResult = await BusinessRules(() => getUserByIdService(id))
@@ -76,10 +75,7 @@ const updateUserById = async (req: Request, res: Response) => {
     const validationResult = updateUserByIdValidationsSchema.safeParse(req.body)
 
     if (!validationResult.success) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid Data Fields',
-      })
+      throw new CustomError(ErrorCodes.INVALID_VALIDATION)
     }
 
     const { id } = req.params
@@ -115,10 +111,7 @@ const updateUserRole = async (req: Request, res: Response) => {
     const validationResult = updateUserRoleValidationsSchema.safeParse(req.body)
 
     if (!validationResult.success) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid Data Fields',
-      })
+      throw new CustomError(ErrorCodes.INVALID_VALIDATION)
     }
 
     const businessResult = await BusinessRules(() =>

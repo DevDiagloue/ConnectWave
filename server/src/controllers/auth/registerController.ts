@@ -9,6 +9,8 @@ import {
 } from '../../services/auth/registerServices'
 import { CustomSuccess } from '../../handler/success/customSuccess'
 import { SuccessCodes } from '../../handler/success/successCodes'
+import { CustomError } from '../../handler/errors/customError'
+import { ErrorCodes } from '../../handler/errors/errorCodes'
 
 const register = async (req: Request, res: Response) => {
   const { userName, firstName, email, password } = req.body
@@ -19,10 +21,7 @@ const register = async (req: Request, res: Response) => {
     )
 
     if (!validationResult.success) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid Validation',
-      })
+      throw new CustomError(ErrorCodes.INVALID_VALIDATION)
     }
 
     const businessResult = await BusinessRules(
@@ -49,7 +48,6 @@ const register = async (req: Request, res: Response) => {
     })
 
     return res.json(successResponse)
-    
   } catch (error) {
     return res.status(500).json({ error: true, message: error })
   }

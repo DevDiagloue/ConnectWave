@@ -9,6 +9,8 @@ import {
 import { cookieOptions } from '../../helpers/token/cookieOptions'
 import { CustomSuccess } from '../../handler/success/customSuccess'
 import { SuccessCodes } from '../../handler/success/successCodes'
+import { CustomError } from '../../handler/errors/customError'
+import { ErrorCodes } from '../../handler/errors/errorCodes'
 
 const login = async (req: Request, res: Response) => {
   const { email, password } = req.body
@@ -17,10 +19,7 @@ const login = async (req: Request, res: Response) => {
     const validationResult = await userLoginValidationSchema.safeParse(req.body)
 
     if (!validationResult.success) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid Validation',
-      })
+      throw new CustomError(ErrorCodes.INVALID_VALIDATION)
     }
 
     const user = await findUserByEmail(email)
