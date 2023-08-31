@@ -2,6 +2,8 @@
 import express, { Application, Response, Request } from 'express'
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
+import helmet from 'helmet'
+import compression from 'compression'
 
 const envFile =
   process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development'
@@ -13,10 +15,14 @@ import { initRoutes } from './routes/index.routes'
 import { errorHandler } from './handler/errors/errorHandler'
 
 const app: Application = express()
-app.use(express.json())
+app.use(express.json({ limit: '10kb' }))
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
+app.use(helmet())
+app.use(compression())
+app.disable('x-powered-by')
 app.use(errorHandler)
+
 
 //healthcheck
 app.get('/healthcheck', (_, res: Response) => {
@@ -25,4 +31,4 @@ app.get('/healthcheck', (_, res: Response) => {
 
 initRoutes(app)
 
-export default app;
+export default app

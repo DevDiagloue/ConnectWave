@@ -4,9 +4,11 @@ import {
   getUserByIdService,
   getAllUserService,
   updateUserByIdService,
+  updateUserRoleService,
 } from '../../services/admin/adminServices'
 import getUserByIdValidationSchema from '../../validations/admin/getUserByIdValidationSchema'
 import updateUserByIdValidationsSchema from '../../validations/admin/updateUserByIdValidationsSchema'
+import updateUserRoleValidationsSchema from '../../validations/admin/updateUserRoleValidationSchema'
 
 const getUserById = async (req: Request, res: Response) => {
   try {
@@ -103,7 +105,34 @@ const updateUserById = async (req: Request, res: Response) => {
 
 const updateUserRole = async (req: Request, res: Response) => {
   try {
-    const { roles } = req.body
+    const { id } = req.params
+    const { role } = req.body
+
+    const validationResult = updateUserRoleValidationsSchema.safeParse(req.body)
+
+    if (!validationResult.success) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid Data Fields',
+      })
+    }
+
+    const businessResult = await BusinessRules(() =>
+      updateUserRoleService(id, role),
+    )
+
+    if (!businessResult) {
+      return res.status(400).json({
+        success: false,
+        message: businessResult,
+      })
+    }
+
+    return res.status(200).json({
+      success: false,
+      message: 'User Role Updated!',
+      data: businessResult.data,
+    })
   } catch (error) {
     return res.status(500).json({ error: true, message: error })
   }

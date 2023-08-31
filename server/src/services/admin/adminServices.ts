@@ -42,10 +42,26 @@ export const updateUserByIdService = async (
   return { success: true, data: updatedUserData }
 }
 
-// export const updateUserRoleService = async (
-//   roles: string,
-// ): Promise<IResult> => {
+export const updateUserRoleService = async (
+  id: string,
+  role: string,
+): Promise<IResult> => {
+  const user = await User.findById(id)
 
+  if (!user) {
+    throw new CustomError(ErrorCodes.USER_NOT_FOUND)
+  }
 
-//   return { success: true, data: updatedUser }
-// }
+  console.log(user.role, 'user rolü')
+
+  const updatedUserRoles = await User.updateOne(
+    { _id: user._id },
+    { $set: { role: role } },
+  )
+
+  console.log(typeof(updatedUserRoles), 'updatedUserRoles burası')
+
+  const updatedRole = await user.save()
+
+  return { success: true, data: updatedRole }
+}
