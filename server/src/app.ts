@@ -23,7 +23,6 @@ app.use(compression())
 app.disable('x-powered-by')
 app.use(errorHandler)
 
-
 //healthcheck
 app.get('/healthcheck', (_, res: Response) => {
   res.status(200).json({ error: false, message: 'healthcheck' })

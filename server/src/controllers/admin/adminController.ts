@@ -9,6 +9,8 @@ import {
 import getUserByIdValidationSchema from '../../validations/admin/getUserByIdValidationSchema'
 import updateUserByIdValidationsSchema from '../../validations/admin/updateUserByIdValidationsSchema'
 import updateUserRoleValidationsSchema from '../../validations/admin/updateUserRoleValidationSchema'
+import { CustomSuccess } from '../../handler/success/customSuccess'
+import { SuccessCodes } from '../../handler/success/successCodes'
 
 const getUserById = async (req: Request, res: Response) => {
   try {
@@ -32,11 +34,11 @@ const getUserById = async (req: Request, res: Response) => {
       })
     }
 
-    return res.status(200).json({
-      success: false,
-      message: 'User found!',
+    const successResponse = new CustomSuccess(SuccessCodes.OK, {
+      message: SuccessCodes.OK.message,
       data: businessResult.data,
     })
+    return res.json(successResponse)
   } catch (error) {
     return res.status(500).json({ error: true, message: error })
   }
@@ -58,11 +60,12 @@ const getAllUsers = async (req: Request, res: Response) => {
       })
     }
 
-    return res.status(200).json({
-      success: false,
-      message: 'User found!',
+    const successResponse = new CustomSuccess(SuccessCodes.OK, {
+      message: SuccessCodes.OK.message,
       data: businessResult.data,
     })
+
+    return res.json(successResponse)
   } catch (error) {
     return res.status(500).json({ error: true, message: error })
   }
@@ -93,11 +96,12 @@ const updateUserById = async (req: Request, res: Response) => {
       })
     }
 
-    return res.status(200).json({
-      success: false,
-      message: 'User updated by using id!',
+    const successResponse = new CustomSuccess(SuccessCodes.OK, {
+      message: SuccessCodes.OK.message,
       data: businessResult.data,
     })
+
+    return res.json(successResponse)
   } catch (error) {
     return res.status(500).json({ error: true, message: error })
   }
@@ -128,11 +132,12 @@ const updateUserRole = async (req: Request, res: Response) => {
       })
     }
 
-    return res.status(200).json({
-      success: false,
-      message: 'User Role Updated!',
+    const successResponse = new CustomSuccess(SuccessCodes.OK, {
+      message: SuccessCodes.OK.message,
       data: businessResult.data,
     })
+
+    return res.json(successResponse)
   } catch (error) {
     return res.status(500).json({ error: true, message: error })
   }
