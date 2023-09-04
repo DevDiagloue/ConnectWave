@@ -41,6 +41,7 @@ const getUserById = async (req: Request, res: Response) => {
     })
     return res.json(successResponse)
   } catch (error) {
+    console.log(error)
     return res
       .status(500)
       .json({ error: true, message: 'Internal server error' })
@@ -70,6 +71,7 @@ const getAllUsers = async (req: Request, res: Response) => {
 
     return res.json(successResponse)
   } catch (error) {
+    console.log(error)
     return res
       .status(500)
       .json({ error: true, message: 'Internal server error' })
@@ -105,6 +107,7 @@ const updateUserById = async (req: Request, res: Response) => {
 
     return res.json(successResponse)
   } catch (error) {
+    console.log(error)
     return res
       .status(500)
       .json({ error: true, message: 'Internal server error' })
@@ -140,6 +143,7 @@ const updateUserRole = async (req: Request, res: Response) => {
 
     return res.json(successResponse)
   } catch (error) {
+    console.log(error)
     return res
       .status(500)
       .json({ error: true, message: 'Internal server error' })

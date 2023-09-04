@@ -13,7 +13,7 @@ export const verifyUser = async (
     if (!token) {
       return res.status(403).json({
         error: true,
-        message: 'Invalid Auth token(req.cookies.jwt) ',
+        message: 'Invalid Token',
       })
     }
 
