@@ -1,5 +1,8 @@
 import { Request, Response } from 'express'
-import { generateToken } from '../../helpers/token/generateToken'
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from '../../helpers/token/generateToken'
 import userLoginValidationSchema from '../../validations/auth/loginValidationSchema'
 import BusinessRules from '../../utils/businessRules/BusinessRules'
 import {
@@ -11,6 +14,7 @@ import { CustomSuccess } from '../../handler/success/customSuccess'
 import { SuccessCodes } from '../../handler/success/successCodes'
 import { CustomError } from '../../handler/errors/customError'
 import { ErrorCodes } from '../../handler/errors/errorCodes'
+import Token from '../../models/Token/Token'
 
 const login = async (req: Request, res: Response) => {
   const { email, password } = req.body
@@ -35,17 +39,25 @@ const login = async (req: Request, res: Response) => {
       })
     }
 
-    const token = await generateToken(user)
+    const accessToken = await generateAccessToken(user)
+    const refreshToken = await generateRefreshToken(user)
 
-    res.cookie('userJWT', token, cookieOptions)
+    // Refresh token'ı veritabanında sakla
+    // const tokenDocument = new Token({ token: refreshToken, userId: user._id })
+    // await tokenDocument.save()
+
+    res.cookie('userJWT', accessToken, cookieOptions)
+    res.cookie('refreshJWT', refreshToken, cookieOptions) // Refresh token'ı da güvenli bir şekilde saklayabilirsiniz.
 
     const successResponse = new CustomSuccess(SuccessCodes.OK, {
       message: SuccessCodes.OK.message,
-      token: token,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     })
 
     return res.json(successResponse)
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ error: true, message: error })
   }
 }
