@@ -1,0 +1,2 @@
+# ConnectWave
+Slack & Discord Alternative
