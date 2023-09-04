@@ -52,16 +52,27 @@ export const updateUserRoleService = async (
     throw new CustomError(ErrorCodes.USER_NOT_FOUND)
   }
 
-  console.log(user.role, 'user rolü')
-
   const updatedUserRoles = await User.updateOne(
     { _id: user._id },
     { $set: { role: role } },
   )
 
-  console.log(typeof(updatedUserRoles), 'updatedUserRoles burası')
-
   const updatedRole = await user.save()
 
   return { success: true, data: updatedRole }
+}
+
+export const deleteUserByIdService = async (id: string): Promise<IResult> => {
+  const user = await User.findById(id)
+
+  console.log(user, 'user Information')
+
+  //check this if scope is not working
+  // if (user === null) {
+  //   throw new CustomError(ErrorCodes.USER_NOT_FOUND)
+  // }
+
+  const deletedUser = await User.deleteOne({ _id: id })
+
+  return { success: true, data: null }
 }

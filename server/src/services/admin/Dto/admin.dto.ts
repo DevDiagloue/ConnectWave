@@ -13,3 +13,4 @@ export interface GetAllUsersResponseDto {
   success: boolean
   data: IUser[]
 }
+

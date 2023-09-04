@@ -5,10 +5,12 @@ import {
   getAllUserService,
   updateUserByIdService,
   updateUserRoleService,
+  deleteUserByIdService,
 } from '../../services/admin/adminServices'
 import getUserByIdValidationSchema from '../../validations/admin/getUserByIdValidationSchema'
 import updateUserByIdValidationsSchema from '../../validations/admin/updateUserByIdValidationsSchema'
 import updateUserRoleValidationsSchema from '../../validations/admin/updateUserRoleValidationSchema'
+import deleteUserByIdValidationSchema from '../../validations/admin/deleteUserByIdValidationSchema'
 import { CustomSuccess } from '../../handler/success/customSuccess'
 import { SuccessCodes } from '../../handler/success/successCodes'
 import { CustomError } from '../../handler/errors/customError'
@@ -39,7 +41,9 @@ const getUserById = async (req: Request, res: Response) => {
     })
     return res.json(successResponse)
   } catch (error) {
-    return res.status(500).json({ error: true, message: error })
+    return res
+      .status(500)
+      .json({ error: true, message: 'Internal server error' })
   }
 }
 
@@ -66,7 +70,9 @@ const getAllUsers = async (req: Request, res: Response) => {
 
     return res.json(successResponse)
   } catch (error) {
-    return res.status(500).json({ error: true, message: error })
+    return res
+      .status(500)
+      .json({ error: true, message: 'Internal server error' })
   }
 }
 
@@ -99,7 +105,9 @@ const updateUserById = async (req: Request, res: Response) => {
 
     return res.json(successResponse)
   } catch (error) {
-    return res.status(500).json({ error: true, message: error })
+    return res
+      .status(500)
+      .json({ error: true, message: 'Internal server error' })
   }
 }
 
@@ -132,8 +140,49 @@ const updateUserRole = async (req: Request, res: Response) => {
 
     return res.json(successResponse)
   } catch (error) {
+    return res
+      .status(500)
+      .json({ error: true, message: 'Internal server error' })
+  }
+}
+
+const deleteUserById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+
+    const validationResult = deleteUserByIdValidationSchema.safeParse(
+      req.params,
+    )
+
+    if (!validationResult.success) {
+      throw new CustomError(ErrorCodes.INVALID_VALIDATION)
+    }
+
+    const businessResult = await BusinessRules(() => deleteUserByIdService(id))
+
+    if (!businessResult) {
+      return res.status(400).json({
+        success: false,
+        message: businessResult,
+      })
+    }
+
+    const successResponse = new CustomSuccess(SuccessCodes.OK, {
+      message: SuccessCodes.OK.message,
+      data: businessResult.data,
+    })
+
+    return res.json(successResponse)
+  } catch (error) {
+    console.log(error)
     return res.status(500).json({ error: true, message: error })
   }
 }
 
-export default { getUserById, getAllUsers, updateUserById, updateUserRole }
+export default {
+  getUserById,
+  getAllUsers,
+  updateUserById,
+  updateUserRole,
+  deleteUserById,
+}
