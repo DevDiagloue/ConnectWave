@@ -95,7 +95,20 @@ const joinChannel = async (req: Request, res: Response) => {
   }
 }
 
+const sendMessageChannel = async (req: Request, res: Response) => {
+  const { channelId } = req.params
+  try {
+    
+  } catch (error) {
+    console.log(error)
+    return res
+      .status(500)
+      .json({ error: true, message: 'Internal server error' })
+  }
+}
+
 export default {
   channelCreate,
   joinChannel,
+  sendMessageChannel,
 }
