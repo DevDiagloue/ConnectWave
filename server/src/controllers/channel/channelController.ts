@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import BusinessRules from '../../utils/businessRules/BusinessRules'
+import joinChannelValidationSchema from '../../validations/channel/joinChannelValidationSchema'
 import createChannelValidationSchema from '../../validations/channel/createChannelValidationSchema'
 import { CustomSuccess } from '../../handler/success/customSuccess'
 import { SuccessCodes } from '../../handler/success/successCodes'
@@ -8,6 +9,7 @@ import { ErrorCodes } from '../../handler/errors/errorCodes'
 import {
   createChannelService,
   checkChannelNameExists,
+  joinChannelService,
 } from '../../services/channel/channelServices'
 import { CustomRequest } from '../../helpers/request/CustomRequest'
 
@@ -56,6 +58,44 @@ const channelCreate = async (req: Request, res: Response) => {
   }
 }
 
+const joinChannel = async (req: Request, res: Response) => {
+  try {
+    const { channelId } = req.params
+
+    const token = (req as CustomRequest).token
+    const userId = (token as { userId: string }).userId
+
+    const validationResult = joinChannelValidationSchema.safeParse(req.params)
+
+    if (!validationResult.success) {
+      throw new CustomError(ErrorCodes.INVALID_VALIDATION)
+    }
+
+    const businessResult = await BusinessRules(() =>
+      joinChannelService(channelId, userId),
+    )
+
+    if (!businessResult) {
+      return res.status(400).json({
+        success: false,
+        message: businessResult,
+      })
+    }
+
+    const successResponse = new CustomSuccess(SuccessCodes.OK, {
+      message: SuccessCodes.OK.message,
+    })
+
+    return res.json(successResponse)
+  } catch (error) {
+    console.log(error)
+    return res
+      .status(500)
+      .json({ error: true, message: 'Internal server error' })
+  }
+}
+
 export default {
   channelCreate,
+  joinChannel,
 }

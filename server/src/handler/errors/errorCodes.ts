@@ -9,6 +9,10 @@ export const ErrorCodes = {
     code: StatusCodes.BAD_REQUEST,
     message: 'Username already exists',
   },
+  CHANNEL_NOT_FOUND: {
+    code: StatusCodes.BAD_REQUEST,
+    message: 'Channel not found',
+  },
   PASSWORD_IS_WRONG: {
     code: StatusCodes.BAD_REQUEST,
     message: 'Password or email is wrong',

@@ -26,3 +26,21 @@ export const checkChannelNameExists = async (
 
   return { success: true }
 }
+
+export const joinChannelService = async (
+  channelId: string,
+  userId: string,
+): Promise<IResult> => {
+
+  const channel = await Channel.findByIdAndUpdate(
+    channelId,
+    { $addToSet: { channelMembers: userId } },
+    { new: true },
+  )
+
+  if (!channel) {
+    throw new CustomError(ErrorCodes.CHANNEL_NOT_FOUND)
+  }
+
+  return { success: true }
+}
