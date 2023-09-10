@@ -28,13 +28,12 @@ app.use(errorHandler)
 const server = http.createServer(app)
 const io = new Server(server)
 
-io.on('connection', (socket) => {
-  console.log('a user connected')
-
-  socket.on('disconnect', () => {
-    console.log('user disconnected')
-  })
-})
+app.use(
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ;(req as any).io = io
+    next()
+  },
+)
 
 //healthcheck
 app.get('/healthcheck', (_, res: Response) => {

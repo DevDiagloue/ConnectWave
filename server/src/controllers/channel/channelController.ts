@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import BusinessRules from '../../utils/businessRules/BusinessRules'
+import sendMessageValidationSchema from '../../validations/channel/sendMessageChannelValidationSchema'
 import joinChannelValidationSchema from '../../validations/channel/joinChannelValidationSchema'
 import createChannelValidationSchema from '../../validations/channel/createChannelValidationSchema'
 import { CustomSuccess } from '../../handler/success/customSuccess'
@@ -10,6 +11,8 @@ import {
   createChannelService,
   checkChannelNameExists,
   joinChannelService,
+  sendMessageChannelService,
+  checkMessageChannelExistsService,
 } from '../../services/channel/channelServices'
 import { CustomRequest } from '../../helpers/request/CustomRequest'
 
@@ -97,8 +100,42 @@ const joinChannel = async (req: Request, res: Response) => {
 
 const sendMessageChannel = async (req: Request, res: Response) => {
   const { channelId } = req.params
+  const { userId, message } = req.body
+
   try {
-    
+    const validationResult = sendMessageValidationSchema.safeParse(req.params)
+
+    if (!validationResult.success) {
+      throw new CustomError(ErrorCodes.INVALID_VALIDATION)
+    }
+
+    const businessResult = await BusinessRules(() =>
+      checkMessageChannelExistsService(channelId),
+    )
+
+    if (!businessResult) {
+      return res.status(400).json({
+        success: false,
+        message: businessResult,
+      })
+    }
+
+    const messageDto = {
+      channelId,
+      userId,
+      message,
+    }
+
+    const data = await sendMessageChannelService(messageDto)
+
+    ;(req as any).io.to(channelId).emit('receiveMessage', data)
+
+    const successResponse = new CustomSuccess(SuccessCodes.OK, {
+      message: SuccessCodes.OK.message,
+      data: data,
+    })
+
+    return res.json(successResponse)
   } catch (error) {
     console.log(error)
     return res
