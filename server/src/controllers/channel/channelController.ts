@@ -9,6 +9,7 @@ import {
   createChannelService,
   checkChannelNameExists,
 } from '../../services/channel/channelServices'
+import { CustomRequest } from '../../helpers/request/CustomRequest'
 
 const channelCreate = async (req: Request, res: Response) => {
   try {
@@ -30,10 +31,14 @@ const channelCreate = async (req: Request, res: Response) => {
       })
     }
 
+    const token = (req as CustomRequest).token
+    const userId = (token as { userId: string }).userId
+
     const channelDto = {
       channelName,
       channelDescription,
       channelType,
+      channelOwner: userId,
     }
     const data = await createChannelService(channelDto)
 

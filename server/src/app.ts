@@ -1,6 +1,5 @@
 //npm packages
 import express, { Application, Response, Request } from 'express'
-import { createServer } from 'http'
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 import helmet from 'helmet'
