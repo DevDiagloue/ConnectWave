@@ -15,6 +15,7 @@ dotenv.config({
 // Custom Modules, Packages, Configs, etc.
 import { initRoutes } from './routes/index.routes'
 import { errorHandler } from './handler/errors/errorHandler'
+import { checkBlackListedToken } from './middleware/checkBlackListedToken'
 
 const app: Application = express()
 app.use(express.json({ limit: '10kb' }))
@@ -24,6 +25,7 @@ app.use(helmet())
 app.use(compression())
 app.disable('x-powered-by')
 app.use(errorHandler)
+app.use(checkBlackListedToken)
 
 const server = http.createServer(app)
 const io = new Server(server)

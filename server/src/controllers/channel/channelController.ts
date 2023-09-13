@@ -12,7 +12,7 @@ import {
   checkChannelNameExists,
   joinChannelService,
   sendMessageChannelService,
-  checkMessageChannelExistsService,
+  checkChannelExistsService,
 } from '../../services/channel/channelServices'
 import { CustomRequest } from '../../helpers/request/CustomRequest'
 
@@ -110,7 +110,7 @@ const sendMessageChannel = async (req: Request, res: Response) => {
     }
 
     const businessResult = await BusinessRules(() =>
-      checkMessageChannelExistsService(channelId),
+      checkChannelExistsService(channelId),
     )
 
     if (!businessResult) {

@@ -59,7 +59,7 @@ export const sendMessageChannelService = async (
   return data
 }
 
-export const checkMessageChannelExistsService = async (
+export const checkChannelExistsService = async (
   channelId: string,
 ) => {
   const checkChannelIsExists = await Channel.findById(channelId)

@@ -42,12 +42,8 @@ const login = async (req: Request, res: Response) => {
     const accessToken = await generateAccessToken(user)
     const refreshToken = await generateRefreshToken(user)
 
-    // Refresh token'ı veritabanında sakla
-    // const tokenDocument = new Token({ token: refreshToken, userId: user._id })
-    // await tokenDocument.save()
-
     res.cookie('userJWT', accessToken, cookieOptions)
-    res.cookie('refreshJWT', refreshToken, cookieOptions) // Refresh token'ı da güvenli bir şekilde saklayabilirsiniz.
+    res.cookie('refreshJWT', refreshToken, cookieOptions)
 
     const successResponse = new CustomSuccess(SuccessCodes.OK, {
       message: SuccessCodes.OK.message,

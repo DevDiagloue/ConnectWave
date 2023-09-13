@@ -29,4 +29,8 @@ export const ErrorCodes = {
     code: StatusCodes.BAD_REQUEST,
     message: 'Invalid Validation Please check your inputs',
   },
+  BLACKLIST_TOKEN: {
+    code: StatusCodes.BAD_REQUEST,
+    message: 'Token is blacklisted. Please re-login',
+  },
 }
