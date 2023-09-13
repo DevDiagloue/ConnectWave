@@ -33,4 +33,8 @@ export const ErrorCodes = {
     code: StatusCodes.BAD_REQUEST,
     message: 'Token is blacklisted. Please re-login',
   },
+  INVALID_TOKEN: {
+    code: StatusCodes.BAD_REQUEST,
+    message: 'Invalid Token',
+  },
 }
