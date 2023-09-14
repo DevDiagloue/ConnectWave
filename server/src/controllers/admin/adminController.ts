@@ -6,11 +6,13 @@ import {
   updateUserByIdService,
   updateUserRoleService,
   deleteUserByIdService,
+  getChannelInformationByIdService,
 } from '../../services/admin/adminServices'
 import getUserByIdValidationSchema from '../../validations/admin/getUserByIdValidationSchema'
 import updateUserByIdValidationsSchema from '../../validations/admin/updateUserByIdValidationsSchema'
 import updateUserRoleValidationsSchema from '../../validations/admin/updateUserRoleValidationSchema'
 import deleteUserByIdValidationSchema from '../../validations/admin/deleteUserByIdValidationSchema'
+import getChannelInformationValidationSchema from '../../validations/channel/getChannelInformationValidationSchema'
 import { CustomSuccess } from '../../handler/success/customSuccess'
 import { SuccessCodes } from '../../handler/success/successCodes'
 import { CustomError } from '../../handler/errors/customError'
@@ -183,10 +185,45 @@ const deleteUserById = async (req: Request, res: Response) => {
   }
 }
 
+const getChannelInformationById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+
+    const validationResult = getChannelInformationValidationSchema.safeParse(
+      req.params,
+    )
+
+    if (!validationResult.success) {
+      throw new CustomError(ErrorCodes.INVALID_VALIDATION)
+    }
+
+    const businessResult = await BusinessRules(() =>
+      getChannelInformationByIdService(id),
+    )
+
+    if (!businessResult) {
+      return res.status(400).json({
+        success: false,
+        message: businessResult,
+      })
+    }
+
+    const successResponse = new CustomSuccess(SuccessCodes.OK, {
+      message: SuccessCodes.OK.message,
+      data: businessResult.data,
+    })
+    return res.json(successResponse)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ error: true, message: error })
+  }
+}
+
 export default {
   getUserById,
   getAllUsers,
   updateUserById,
   updateUserRole,
   deleteUserById,
+  getChannelInformationById,
 }

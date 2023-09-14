@@ -8,5 +8,9 @@ router.get('/getAllUsers', adminController.getAllUsers)
 router.put('/updateUserById/:id', adminController.updateUserById)
 router.put('/updateUserRole/:id', adminController.updateUserRole)
 router.delete('/deleteUserById/:id', adminController.deleteUserById)
+router.get(
+  '/getChannelInformationById/:id',
+  adminController.getChannelInformationById,
+)
 
 export default router

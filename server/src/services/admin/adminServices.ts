@@ -2,6 +2,7 @@ import User from '../../models/User/User'
 import { IResult } from '../../utils/businessRules/IResult'
 import { CustomError } from '../../handler/errors/customError'
 import { ErrorCodes } from '../../handler/errors/errorCodes'
+import Channel from '../../models/Channel/Channel'
 
 export const getUserByIdService = async (id: string): Promise<IResult> => {
   const user = await User.findById(id)
@@ -75,4 +76,16 @@ export const deleteUserByIdService = async (id: string): Promise<IResult> => {
   const deletedUser = await User.deleteOne({ _id: id })
 
   return { success: true, data: null }
+}
+
+export const getChannelInformationByIdService = async (
+  id: string,
+): Promise<IResult> => {
+  const channelInformation = await Channel.findById(id)
+
+  if (!channelInformation) {
+    throw new CustomError(ErrorCodes.USER_NOT_FOUND)
+  }
+
+  return { success: true, data: channelInformation }
 }
