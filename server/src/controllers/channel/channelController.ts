@@ -144,6 +144,11 @@ const sendMessageChannel = async (req: Request, res: Response) => {
   }
 }
 
+const leaveChannel = async (req: Request, res: Response) => {
+
+  
+}
+
 export default {
   channelCreate,
   joinChannel,

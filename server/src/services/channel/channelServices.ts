@@ -69,3 +69,9 @@ export const checkChannelExistsService = async (
   }
   return { success: true }
 }
+
+export const leaveChannelService = async (
+
+) => {
+  
+}
