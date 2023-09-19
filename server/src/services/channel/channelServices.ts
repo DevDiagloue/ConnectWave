@@ -59,19 +59,67 @@ export const sendMessageChannelService = async (
   return data
 }
 
-export const checkChannelExistsService = async (
-  channelId: string,
-) => {
+export const checkChannelExistsService = async (channelId: string) => {
   const checkChannelIsExists = await Channel.findById(channelId)
-  
+
   if (!checkChannelIsExists) {
     throw new CustomError(ErrorCodes.CHANNEL_NOT_FOUND)
   }
   return { success: true }
 }
 
-export const leaveChannelService = async (
+// export const checkChannelOwnerService = async (
+//   channelId: string,
+//   userId: string,
+// ): Promise<IResult> => {
+//   const checkChannelOwnerIsExists = await Channel.findOne({
+//     _id: channelId,
+//     channelOwner: userId,
+//   })
 
-) => {
-  
+//   if (!checkChannelOwnerIsExists) {
+//     throw new CustomError(ErrorCodes.CHANNEL_NOT_FOUND)
+//   }
+
+//   // if (!checkChannelOwnerIsExists.channelMembers.includes(userId)) {
+//   //   throw new Error('User is not a member of this channel')
+//   // }
+
+//   // // Kullanıcının kanalın sahibi olup olmadığını kontrol edin
+//   // if (checkChannelOwnerIsExists.channelOwner === userId) {
+//   //   throw new Error('Channel owner cannot leave the channel')
+//   // }
+
+//   return { success: true }
+// }
+
+export const leaveChannelService = async (
+  channelId: string,
+  userId: string,
+): Promise<IResult> => {
+  const checkChannelIsExists = await Channel.findById(channelId)
+
+  if (!checkChannelIsExists) {
+    throw new CustomError(ErrorCodes.CHANNEL_NOT_FOUND)
+  }
+
+  const checkChannelOwnerIsExists = await Channel.findOne({
+    channelOwner: userId,
+  })
+
+  if (!checkChannelOwnerIsExists) {
+    throw new CustomError(ErrorCodes.CHANNEL_NOT_FOUND)
+  }
+
+  console.log(
+    checkChannelOwnerIsExists.channelMembers.includes(userId),
+    'channel Owner',
+  )
+
+  await Channel.updateOne(
+    { _id: channelId },
+    { $pull: { channelMembers: userId } },
+  )
+
+  return { success: true }
 }

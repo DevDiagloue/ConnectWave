@@ -16,4 +16,10 @@ router.post(
   channelController.sendMessageChannel,
 )
 
+router.post(
+  '/leaveChannel/:channelId',
+  verifyUser,
+  channelController.leaveChannel,
+)
+
 export default router

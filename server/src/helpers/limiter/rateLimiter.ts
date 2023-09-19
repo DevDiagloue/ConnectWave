@@ -1,6 +1,7 @@
+import { Application } from 'express'
 import rateLimit from 'express-rate-limit'
 
-const initLimit = (app) => {
+const initLimit = (app: Application) => {
   app.use(
     rateLimit({
       windowMs: 15 * 60 * 1000,
