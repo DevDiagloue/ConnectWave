@@ -37,4 +37,8 @@ export const ErrorCodes = {
     code: StatusCodes.BAD_REQUEST,
     message: 'Invalid Token',
   },
+  INVALID_USER: {
+    code: StatusCodes.BAD_REQUEST,
+    message: 'Invalid User',
+  },
 }

@@ -15,6 +15,7 @@ import {
   sendMessageChannelService,
   checkChannelExistsService,
   leaveChannelService,
+  checkChannelOwnerService,
 } from '../../services/channel/channelServices'
 import { CustomRequest } from '../../helpers/request/CustomRequest'
 
@@ -158,8 +159,9 @@ const leaveChannel = async (req: Request, res: Response) => {
       throw new CustomError(ErrorCodes.INVALID_VALIDATION)
     }
 
-    const businessResult = await BusinessRules(() =>
-      leaveChannelService(channelId, userId),
+    const businessResult = await BusinessRules(
+      () => checkChannelOwnerService(channelId, userId),
+      () => leaveChannelService(channelId, userId),
     )
 
     if (!businessResult) {
