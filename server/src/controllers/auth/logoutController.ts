@@ -17,6 +17,8 @@ const logout = async (req: Request, res: Response) => {
       expireDate,
     })
 
+  
+
     const successResponse = new CustomSuccess(SuccessCodes.OK, {
       message: SuccessCodes.OK.message,
       blackListToken: data.blackListToken,
