@@ -81,9 +81,6 @@ export const checkChannelOwnerService = async (
     throw new CustomError(ErrorCodes.CHANNEL_NOT_FOUND)
   }
 
-  if (!checkChannelOwnerIsExists) {
-    throw new CustomError(ErrorCodes.INVALID_USER)
-  }
 
   if (checkChannelOwnerIsExists.channelOwner.toString() === userId) {
     throw new CustomError(ErrorCodes.INVALID_USER)
