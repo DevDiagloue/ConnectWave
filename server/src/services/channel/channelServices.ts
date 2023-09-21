@@ -72,14 +72,20 @@ export const leaveChannelService = async (
   channelId: string,
   userId: string,
 ): Promise<IResult> => {
-  const checkChannelIsExists = await Channel.findById(channelId)
+  const channel = await Channel.findById(channelId)
 
-  if (!checkChannelIsExists) {
+  if (!channel) {
     throw new CustomError(ErrorCodes.CHANNEL_NOT_FOUND)
   }
 
-  if (checkChannelIsExists.channelOwner.toString() === userId) {
-    throw new CustomError(ErrorCodes.INVALID_USER)
+  //check if user is owner of channel
+  if (channel.channelOwner.toString() === userId) {
+    throw new CustomError(ErrorCodes.CANNOT_LEAVE_CHANNEL_OWNER)
+  }
+
+  //check if user is last member of channel
+  if (channel.channelMembers.length === 1) {
+    throw new CustomError(ErrorCodes.CANNOT_LEAVE_AS_LAST_MEMBER)
   }
 
   await Channel.updateOne(

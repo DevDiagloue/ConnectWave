@@ -41,4 +41,13 @@ export const ErrorCodes = {
     code: StatusCodes.BAD_REQUEST,
     message: 'Invalid User',
   },
+  CANNOT_LEAVE_CHANNEL_OWNER: {
+    code: StatusCodes.BAD_REQUEST,
+    message: 'Cannot leave channel owner',
+  },
+  CANNOT_LEAVE_AS_LAST_MEMBER: {
+    code: StatusCodes.BAD_REQUEST,
+    message: 'Cannot leave as last member',
+  },
+
 }
