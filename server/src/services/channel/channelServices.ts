@@ -95,3 +95,23 @@ export const leaveChannelService = async (
 
   return { success: true }
 }
+
+export const deleteChannelService = async (
+  channelId: string,
+  userId: string,
+): Promise<IResult> => {
+  const channel = await Channel.findById(channelId)
+
+  if (!channel) {
+    throw new CustomError(ErrorCodes.CHANNEL_NOT_FOUND)
+  }
+
+  //check if user is owner of channel
+  if (channel.channelOwner.toString() === userId) {
+    throw new CustomError(ErrorCodes.CANNOT_LEAVE_CHANNEL_OWNER)
+  }
+
+  await channel.deleteOne({ _id: channelId })
+
+  return { success: true }
+}

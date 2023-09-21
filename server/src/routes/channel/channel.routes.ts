@@ -22,4 +22,10 @@ router.post(
   channelController.leaveChannel,
 )
 
+router.delete(
+  '/deleteChannel/:channelId',
+  verifyUser,
+  channelController.deleteChannel,
+)
+
 export default router
