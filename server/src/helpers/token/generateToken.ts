@@ -14,7 +14,7 @@ export const generateAccessToken = (user: IUser): string => {
     }
 
     return jwt.sign(payload, process.env.ACCESS_TOKEN_USER_KEY!, {
-      expiresIn: process.env.TOKEN_EXPIRATION,
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRATION,
     })
   } catch (error) {
     console.error('Access token error:', error)

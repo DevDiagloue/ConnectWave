@@ -15,6 +15,8 @@ export const connectionDatabase = async () => {
     .connect(MONGO_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      maxPoolSize: 10,
+      minPoolSize: 0,
     } as ConnectOptions)
     .then((res) => {
       console.log('Database Connected Successfuly.', res.connection.host)

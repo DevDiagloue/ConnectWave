@@ -68,27 +68,6 @@ export const checkChannelExistsService = async (channelId: string) => {
   return { success: true }
 }
 
-export const checkChannelOwnerService = async (
-  channelId: string,
-  userId: string,
-): Promise<IResult> => {
-  const checkChannelOwnerIsExists = await Channel.findOne({
-    _id: channelId,
-    channelOwner: userId,
-  })
-
-  if (!checkChannelOwnerIsExists) {
-    throw new CustomError(ErrorCodes.CHANNEL_NOT_FOUND)
-  }
-
-
-  if (checkChannelOwnerIsExists.channelOwner.toString() === userId) {
-    throw new CustomError(ErrorCodes.INVALID_USER)
-  }
-
-  return { success: true }
-}
-
 export const leaveChannelService = async (
   channelId: string,
   userId: string,
@@ -99,12 +78,8 @@ export const leaveChannelService = async (
     throw new CustomError(ErrorCodes.CHANNEL_NOT_FOUND)
   }
 
-  const checkChannelOwnerIsExists = await Channel.findOne({
-    channelOwner: userId,
-  })
-
-  if (!checkChannelOwnerIsExists) {
-    throw new CustomError(ErrorCodes.CHANNEL_NOT_FOUND)
+  if (checkChannelIsExists.channelOwner.toString() === userId) {
+    throw new CustomError(ErrorCodes.INVALID_USER)
   }
 
   await Channel.updateOne(
