@@ -12,5 +12,6 @@ router.get(
   '/getChannelInformationById/:id',
   adminController.getChannelInformationById,
 )
+router.get('/allChannels', adminController.GetAllChannel)
 
 export default router

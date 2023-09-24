@@ -89,3 +89,18 @@ export const getChannelInformationByIdService = async (
 
   return { success: true, data: channelInformation }
 }
+
+export const getAllChannel = async (
+  page: number,
+  pageSize: number,
+): Promise<IResult> => {
+  const allChannels = await Channel.find({})
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
+    .sort('-createdAt')
+
+  if (!allChannels) {
+    throw new CustomError(ErrorCodes.CHANNEL_NOT_FOUND)
+  }
+  return { success: true, data: allChannels }
+}

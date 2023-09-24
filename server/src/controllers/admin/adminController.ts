@@ -7,6 +7,7 @@ import {
   updateUserRoleService,
   deleteUserByIdService,
   getChannelInformationByIdService,
+  getAllChannel,
 } from '../../services/admin/adminServices'
 import getUserByIdValidationSchema from '../../validations/admin/getUserByIdValidationSchema'
 import updateUserByIdValidationsSchema from '../../validations/admin/updateUserByIdValidationsSchema'
@@ -219,6 +220,36 @@ const getChannelInformationById = async (req: Request, res: Response) => {
   }
 }
 
+const GetAllChannel = async (req: Request, res: Response) => {
+  try {
+    const page = Number(req.query.pageNumber) || 1
+    const pageSize = 20
+
+    const businessResult = await BusinessRules(() =>
+      getAllChannel(page, pageSize),
+    )
+
+    if (!businessResult) {
+      return res.status(400).json({
+        success: false,
+        message: businessResult,
+      })
+    }
+
+    const successResponse = new CustomSuccess(SuccessCodes.OK, {
+      message: SuccessCodes.OK.message,
+      data: businessResult.data,
+    })
+
+    return res.json(successResponse)
+  } catch (error) {
+    console.log(error)
+    return res
+      .status(500)
+      .json({ error: true, message: 'Internal server error' })
+  }
+}
+
 export default {
   getUserById,
   getAllUsers,
@@ -226,4 +257,5 @@ export default {
   updateUserRole,
   deleteUserById,
   getChannelInformationById,
+  GetAllChannel
 }
