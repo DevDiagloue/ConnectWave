@@ -3,13 +3,13 @@ import adminController from '../../controllers/admin/adminController'
 
 const router = Router()
 
-router.get('/getUserById/:id', adminController.getUserById)
-router.get('/getAllUsers', adminController.getAllUsers)
-router.put('/updateUserById/:id', adminController.updateUserById)
-router.put('/updateUserRole/:id', adminController.updateUserRole)
-router.delete('/deleteUserById/:id', adminController.deleteUserById)
+router.get('/userById/:id', adminController.getUserById)
+router.get('/allUsers', adminController.getAllUsers)
+router.put('/userById/:id', adminController.updateUserById)
+router.put('/userRole/:id', adminController.updateUserRole)
+router.delete('/userById/:id', adminController.deleteUserById)
 router.get(
-  '/getChannelInformationById/:id',
+  '/channelInformationById/:id',
   adminController.getChannelInformationById,
 )
 router.get('/allChannels', adminController.GetAllChannel)
