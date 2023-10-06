@@ -3,7 +3,7 @@ import IPost from '../Post/IPost'
 import CommentSchema from '../Comment/Comment'
 import moment from 'moment'
 
-const commentSchema = new mongoose.Schema<IPost>({
+const postSchema = new mongoose.Schema<IPost>({
   user: { type: String, required: true },
   content: { type: String, required: true },
   createdAt: { type: String, require: false },
@@ -20,6 +20,6 @@ const commentSchema = new mongoose.Schema<IPost>({
   },
 })
 
-const Post = mongoose.model('Post', commentSchema)
+const Post = mongoose.model('Post', postSchema)
 
 export default Post
