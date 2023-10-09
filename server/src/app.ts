@@ -9,6 +9,8 @@ import { Server } from 'socket.io'
 import passport from 'passport'
 import { Strategy as GitHubStrategy, Profile } from 'passport-github2'
 import session from 'express-session'
+import ejs from 'ejs'
+import path from 'path'
 
 const envFile =
   process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development'
@@ -38,6 +40,9 @@ app.use(
 )
 app.use(errorHandler)
 app.use(checkBlackListedToken)
+
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs')
 
 const server = http.createServer(app)
 const io = new Server(server)
@@ -80,6 +85,11 @@ app.get(
     res.redirect('/dashboard')
   },
 )
+
+app.get('/login', (req, res) => {
+  console.log(req.user)
+  res.render('login')
+})
 
 //healthcheck
 app.get('/healthcheck', (_, res: Response) => {

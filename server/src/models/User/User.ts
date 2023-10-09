@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema<IUser>({
   githubId: {
     type: String,
     required: true,
-    unique: true, // GitHub ID benzersiz olmalıdır
+    unique: true,
   },
   userName: { type: String, required: true, unique: true },
   firstName: { type: String, required: true },
