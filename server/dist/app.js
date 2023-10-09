@@ -11,6 +11,9 @@ const helmet_1 = __importDefault(require("helmet"));
 const compression_1 = __importDefault(require("compression"));
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
+const passport_1 = __importDefault(require("passport"));
+const passport_github2_1 = require("passport-github2");
+const express_session_1 = __importDefault(require("express-session"));
 const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
 dotenv_1.default.config({
     path: envFile,
@@ -26,14 +29,37 @@ app.use((0, cookie_parser_1.default)());
 app.use((0, helmet_1.default)());
 app.use((0, compression_1.default)());
 app.disable('x-powered-by');
+app.set('trust proxy', 1); // trust first proxy
+app.use((0, express_session_1.default)({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true },
+}));
 app.use(errorHandler_1.errorHandler);
 app.use(checkBlackListedToken_1.checkBlackListedToken);
 const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server);
-app.use((req, res, next) => {
-    ;
-    req.io = io;
-    next();
+passport_1.default.use(new passport_github2_1.Strategy({
+    clientID: process.env.GITHUB_CLIENT_ID || '',
+    clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+    callbackURL: process.env.GITHUB_CALLBACK_URL || '',
+}, (accessToken, refreshToken, profile, cb) => {
+    console.log(profile);
+    cb(null, profile);
+}));
+app.use(passport_1.default.initialize());
+app.use(passport_1.default.session());
+passport_1.default.serializeUser(function (user, cb) {
+    cb(null, user);
+});
+passport_1.default.deserializeUser(function (id, cb) {
+    cb(null, id);
+});
+app.get('/auth/github', passport_1.default.authenticate('github', { scope: ['user:email'] }));
+app.get('/auth/github/callback', passport_1.default.authenticate('github', { failureRedirect: '/' }), function (req, res) {
+    console.log('kimlik başarılı');
+    res.redirect('/dashboard');
 });
 //healthcheck
 app.get('/healthcheck', (_, res) => {
