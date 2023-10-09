@@ -3,6 +3,11 @@ import IUser from './IUser'
 import moment from 'moment'
 
 const userSchema = new mongoose.Schema<IUser>({
+  githubId: {
+    type: String,
+    required: true,
+    unique: true, // GitHub ID benzersiz olmalıdır
+  },
   userName: { type: String, required: true, unique: true },
   firstName: { type: String, required: true },
   email: { type: String, required: true, unique: true },

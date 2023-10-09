@@ -1,6 +1,7 @@
 import { Document } from 'mongoose'
 
 interface IUser extends Document {
+  githubId: string
   userName: string
   firstName: string
   email: string

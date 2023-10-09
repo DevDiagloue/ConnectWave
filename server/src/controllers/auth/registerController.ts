@@ -1,4 +1,6 @@
 import { Request, Response } from 'express'
+import passport from 'passport'
+import { Strategy as GitHubStrategy } from 'passport-github2'
 import userRegisterValidationSchema from '../../validations/auth/registerValidationSchema'
 import bcrypt from 'bcrypt'
 import BusinessRules from '../../utils/businessRules/BusinessRules'

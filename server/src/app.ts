@@ -6,6 +6,9 @@ import helmet from 'helmet'
 import compression from 'compression'
 import http from 'http'
 import { Server } from 'socket.io'
+import passport from 'passport'
+import { Strategy as GitHubStrategy, Profile } from 'passport-github2'
+import session from 'express-session'
 
 const envFile =
   process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development'
@@ -24,16 +27,57 @@ app.use(cookieParser())
 app.use(helmet())
 app.use(compression())
 app.disable('x-powered-by')
+app.set('trust proxy', 1) // trust first proxy
+app.use(
+  session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true },
+  }),
+)
 app.use(errorHandler)
 app.use(checkBlackListedToken)
 
 const server = http.createServer(app)
 const io = new Server(server)
 
-app.use(
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    ;(req as any).io = io
-    next()
+passport.use(
+  new GitHubStrategy(
+    {
+      clientID: process.env.GITHUB_CLIENT_ID || '',
+      clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+      callbackURL: process.env.GITHUB_CALLBACK_URL || '',
+    },
+    (accessToken: string, refreshToken: string, profile: any, cb: any) => {
+      console.log(profile)
+      cb(null, profile)
+    },
+  ),
+)
+
+app.use(passport.initialize())
+app.use(passport.session())
+
+passport.serializeUser(function (user, cb) {
+  cb(null, user)
+})
+
+passport.deserializeUser(function (id: unknown, cb) {
+  cb(null, id as Profile)
+})
+
+app.get(
+  '/auth/github',
+  passport.authenticate('github', { scope: ['user:email'] }),
+)
+
+app.get(
+  '/auth/github/callback',
+  passport.authenticate('github', { failureRedirect: '/' }),
+  function (req, res) {
+    console.log('kimlik başarılı')
+    res.redirect('/dashboard')
   },
 )
 
