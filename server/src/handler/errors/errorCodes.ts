@@ -49,5 +49,4 @@ export const ErrorCodes = {
     code: StatusCodes.BAD_REQUEST,
     message: 'Cannot leave as last member',
   },
-
 }

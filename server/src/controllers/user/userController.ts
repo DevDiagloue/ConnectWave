@@ -1,5 +1,1 @@
-
-
-const leaveGroup = async (req: Request, res: Response) => {
-    
-}
+const leaveGroup = async (req: Request, res: Response) => {}

@@ -4,6 +4,5 @@ export const SuccessCodes = {
   OK: {
     code: StatusCodes.OK,
     message: 'Process completed successfully',
-
   },
 }

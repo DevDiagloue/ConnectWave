@@ -8,9 +8,8 @@ interface PostDto {
   content: string
 }
 
-
 export const createPostService = async (postDto: PostDto) => {
-    const newPost = await Post.create(postDto)
-    const data = await newPost.save()
-    return data
+  const newPost = await Post.create(postDto)
+  const data = await newPost.save()
+  return data
 }

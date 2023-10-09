@@ -5,7 +5,6 @@ import { CustomError } from '../../handler/errors/customError'
 import { ErrorCodes } from '../../handler/errors/errorCodes'
 import bcrypt from 'bcrypt'
 
-
 export const findUserByEmail = async (email: string): Promise<IUser> => {
   const user = await User.findOne({ email })
   if (!user) {

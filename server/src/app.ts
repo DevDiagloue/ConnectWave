@@ -55,7 +55,7 @@ passport.use(
       callbackURL: process.env.GITHUB_CALLBACK_URL || '',
     },
     (accessToken: string, refreshToken: string, profile: any, cb: any) => {
-      console.log('profil bilgisi', profile)
+      console.log('profile information', profile)
       cb(null, profile)
     },
   ),

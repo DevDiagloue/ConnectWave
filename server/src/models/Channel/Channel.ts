@@ -18,7 +18,6 @@ const channelSchema = new mongoose.Schema<IChannel>({
   },
 })
 
-
 const Channel = mongoose.model<IChannel>('Channel', channelSchema)
 
 export default Channel

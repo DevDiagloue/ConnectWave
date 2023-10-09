@@ -257,5 +257,5 @@ export default {
   updateUserRole,
   deleteUserById,
   getChannelInformationById,
-  GetAllChannel
+  GetAllChannel,
 }
