@@ -55,7 +55,7 @@ passport.use(
       callbackURL: process.env.GITHUB_CALLBACK_URL || '',
     },
     (accessToken: string, refreshToken: string, profile: any, cb: any) => {
-      console.log(profile)
+      console.log('profil bilgisi', profile)
       cb(null, profile)
     },
   ),
@@ -81,7 +81,6 @@ app.get(
   '/auth/github/callback',
   passport.authenticate('github', { failureRedirect: '/' }),
   function (req, res) {
-    console.log('kimlik başarılı')
     res.redirect('/dashboard')
   },
 )
