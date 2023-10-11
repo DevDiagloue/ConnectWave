@@ -12,7 +12,6 @@ const compression_1 = __importDefault(require("compression"));
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
 const passport_1 = __importDefault(require("passport"));
-const passport_github2_1 = require("passport-github2");
 const express_session_1 = __importDefault(require("express-session"));
 const path_1 = __importDefault(require("path"));
 const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
@@ -43,28 +42,9 @@ app.set('views', path_1.default.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server);
-passport_1.default.use(new passport_github2_1.Strategy({
-    clientID: process.env.GITHUB_CLIENT_ID || '',
-    clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
-    callbackURL: process.env.GITHUB_CALLBACK_URL || '',
-}, (accessToken, refreshToken, profile, cb) => {
-    console.log('accessToken', accessToken);
-    console.log('refreshToken', refreshToken);
-    console.log('profile information', profile);
-    cb(null, profile);
-}));
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
-passport_1.default.serializeUser(function (user, cb) {
-    cb(null, user);
-});
-passport_1.default.deserializeUser(function (id, cb) {
-    cb(null, id);
-});
-app.get('/auth/github', passport_1.default.authenticate('github', { scope: ['user:email'] }));
-app.get('/auth/github/callback', passport_1.default.authenticate('github', { failureRedirect: '/' }), function (req, res) {
-    res.redirect('/dashboard');
-});
+//example login for views
 app.get('/login', (req, res) => {
     console.log(req.user);
     res.render('login');
