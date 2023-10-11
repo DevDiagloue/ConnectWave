@@ -3,7 +3,7 @@ import { connectionDatabase } from './databases/connectionDatabase'
 
 const APP_PORT = process.env.PORT || 3000
 
-app.listen(APP_PORT, () => {
-  connectionDatabase()
+app.listen(APP_PORT, async () => {
+  await connectionDatabase()
   console.log(`Listening: http://localhost:${APP_PORT}`)
 })
