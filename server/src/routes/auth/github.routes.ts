@@ -2,6 +2,7 @@ import {Router} from 'express'
 import logoutController from '../../controllers/auth/logoutController'
 import passport from 'passport'
 import {Profile, Strategy as GitHubStrategy} from 'passport-github2'
+import User from "../../models/User/User"
 
 passport.use(
     new GitHubStrategy(
