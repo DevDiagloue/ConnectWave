@@ -19,7 +19,7 @@ export const connectionDatabase = async () => {
       minPoolSize: 0,
     } as ConnectOptions)
     .then((res) => {
-      console.log('Database Connected Successfuly.', res.connection.host)
+      console.log('Database Connected Successfully.', res.connection.host)
     })
     .catch((err) => {
       console.log('Database connection error: ', err)
