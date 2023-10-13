@@ -5,7 +5,3 @@ export interface IResult<T = any> {
   message?: string
   data?: T
 }
-
-export type GetUserByIdResponseDto = IResult<IUser>
-export type GetAllUsersResponseDto = IResult<IUser[]>
-export type GetUserByIdRequestDto = { id: string }

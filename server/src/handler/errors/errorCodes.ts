@@ -25,6 +25,10 @@ export const ErrorCodes = {
     code: StatusCodes.BAD_REQUEST,
     message: 'User not found',
   },
+  USER_NOT_CREATED: {
+    code: StatusCodes.BAD_REQUEST,
+    message: 'User not created',
+  },
   INVALID_VALIDATION: {
     code: StatusCodes.BAD_REQUEST,
     message: 'Invalid Validation Please check your inputs',
